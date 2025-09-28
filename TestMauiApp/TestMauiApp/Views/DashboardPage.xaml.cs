@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+﻿using FileSearch;
+using Microsoft.Maui.Controls.Shapes;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
@@ -39,7 +40,31 @@ namespace TestMauiApp.Views
             {
                 FileSearch.Program.indexer.addPathToIndex(folderPath);
             }
-            FileSearch.Program.indexer.updateIndex();
+            _ = Task.Run(async () =>
+            {
+                await FileSearch.Program.indexer.updateIndex();
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    var matches = SearchIndex.SearchBestMatches("file", 12);
+                    foreach (var match in matches)
+                    {
+                        var imagePath = "fileicon.png";
+                        var imageType = match.FileType;
+                        if (imageType.Contains("image"))
+                        {
+                            imagePath = match.Path;
+                        }
+                        model.Cards.Add(new CardModel
+                        {
+                            Title = match.Name,
+                            Subtitle = "Some details",
+                            ImagePath = imagePath
+                        });
+                    }
+                });
+            });
+
             // Items is name of a collectionView
             // Add every from files to Items
 
@@ -95,11 +120,14 @@ namespace TestMauiApp.Views
             value = "111";
 
             // Write to file
-            
+
+
             File.WriteAllText(jsonPath, jsonString);
             value = File.Exists(jsonPath).ToString();
-            value = System.IO.Path.GetFullPath(jsonPath); 
+            value = System.IO.Path.GetFullPath(jsonPath);
 
+            Program.indexer.addPathToIndex("path");
+            Program.indexer.updateIndex();
 
             if (BindingContext is DashboardViewModel vm &&
                 !vm.FilePaths.Contains(path))

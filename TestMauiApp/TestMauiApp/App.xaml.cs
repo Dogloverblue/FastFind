@@ -1,9 +1,11 @@
-﻿using GlobalHotKeys;
+﻿using FileSearch;
+using GlobalHotKeys;
 using GlobalHotKeys.Native.Types;
 using Microsoft.Maui.Platform;
 using System.Reactive.Linq;
 using System.Text.Json;
 using TestMauiApp.FileSearch;
+using TestMauiApp.ViewModels;
 using TestMauiApp.Views;
 
 namespace TestMauiApp
@@ -30,6 +32,7 @@ namespace TestMauiApp
             window.Width = newWidth;
             window.Height = newHeight;
             AppPaths.setup();
+          
             return new Window(new AppShell());
 
         }

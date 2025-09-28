@@ -13,14 +13,8 @@ public partial class DashboardViewModel
     public bool Setting2 { get; set; }
     public bool Setting3 { get; set; }
 
-    public ObservableCollection<CardModel> Cards { get; } = new(
-           Enumerable.Range(1, 12).Select(i => new CardModel
-           {
-               Title = $"Item {i}",
-               Subtitle = "Some details",
+    public ObservableCollection<CardModel> Cards { get; } = new();
 
-               ImagePath = "C:\\Users\\lowen\\Downloads\\sillyGuy.jpg"
-           }));
 
 
     public ICommand CardTappedCommand => new Command<CardModel>(card =>
