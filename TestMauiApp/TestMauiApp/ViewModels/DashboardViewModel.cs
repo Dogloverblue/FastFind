@@ -14,6 +14,7 @@ public partial class DashboardViewModel
            {
                Title = $"Item {i}",
                Subtitle = "Some details",
+
                ImagePath = "C:\\Users\\lowen\\Downloads\\sillyGuy.jpg"
            }));
 
@@ -24,11 +25,12 @@ public partial class DashboardViewModel
         Application.Current?.MainPage?.DisplayAlert("Tapped", card?.Title, "OK");
     });
 
-    public ObservableCollection<string> FilePaths { get; } = new(Enumerable.Range(1, 10).Select(i => "File " + i));
-
+    public ObservableCollection<string> FilePaths { get; } = new();
+    
     public ICommand RemovePathCommand => new Command<string>(path =>
     {
         if (path is null) return;
+
         FilePaths.Remove(path);
     });
 

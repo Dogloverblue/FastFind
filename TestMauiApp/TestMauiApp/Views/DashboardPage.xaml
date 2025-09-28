@@ -15,6 +15,7 @@
 
             <!-- LEFT: text + toggles -->
         <VerticalStackLayout Grid.Column="0" Spacing="12">
+            
             <Label Text="Text here" FontSize="28" FontAttributes="Bold" />
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                 <Switch IsToggled="{Binding Setting1}" />
@@ -32,11 +33,14 @@
             <!-- Row: path Entry + browse + Add -->
             
             <Grid ColumnDefinitions="*,Auto,Auto">
-                    <Frame></Frame>
+                    
                 <Entry x:Name="PathEntry"
                Grid.Column="0"
                Placeholder="Paste or pick a file path"
                ClearButtonVisibility="WhileEditing" />
+                
+                
+                
                 <Button Grid.Column="1"
                 Text="…"
                 Padding="12,0"
@@ -50,7 +54,7 @@
             </VerticalStackLayout>
             <!-- List of paths -->
 
-            <CollectionView Grid.Row="2" ItemsSource="{Binding FilePaths}"
+            <CollectionView x:Name="Items" Grid.Row="2" ItemsSource="{Binding FilePaths}"
                     VerticalOptions="Center"
                     BackgroundColor="#363636"
                             >

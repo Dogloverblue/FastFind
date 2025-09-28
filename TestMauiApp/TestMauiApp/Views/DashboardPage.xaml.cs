@@ -1,4 +1,10 @@
-﻿using TestMauiApp.ViewModels;
+﻿using Microsoft.Maui.Controls.Shapes;
+using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
+using TestMauiApp.FileSearch;
+using TestMauiApp.ViewModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TestMauiApp.Views
 {
@@ -9,15 +15,37 @@ namespace TestMauiApp.Views
         public DashboardPage()
         {
             InitializeComponent();
-           
-            BindingContext = new DashboardViewModel();
-           
-            
+            DashboardViewModel model = new DashboardViewModel();
+            BindingContext = model;
+
+
+            ConfigData config;
+            List<string> files = new();
+            string jsonPath = AppPaths.SettingsFile;
+            if (File.Exists(jsonPath))
+            {
+                string jsonStringRead = File.ReadAllText(jsonPath);
+                config = JsonSerializer.Deserialize<ConfigData>(jsonStringRead);
+                files = config.FilePaths;
+            }
+
+
+            foreach (string path in files) {
+                model.FilePaths.Add(path);
+            }
+            // Items is name of a collectionView
+            // Add every from files to Items
+
+
+
+
+
         }
 
         async void OnBrowseClicked(object sender, EventArgs e)
         {
             Console.WriteLine("fds");
+            Trace.WriteLine("dsfdsf");
             var result = await FilePicker.Default.PickAsync(new PickOptions
             {
                 PickerTitle = "Choose a file"
@@ -27,11 +55,43 @@ namespace TestMauiApp.Views
                 PathEntry.Text = result.FullPath; // put the chosen path in the textbox
         }
 
+
+        static string value = "Amongs";
         void OnAddPathClicked(object sender, EventArgs e)
         {
             
             var path = PathEntry.Text?.Trim();
+            ConfigData config;
             if (string.IsNullOrWhiteSpace(path)) return;
+            string jsonPath = AppPaths.SettingsFile;
+            if (File.Exists(jsonPath))
+            {
+            string jsonStringRead = File.ReadAllText(jsonPath);
+                config = JsonSerializer.Deserialize<ConfigData>(jsonStringRead);
+            } else
+            {
+                config = new ConfigData();
+                Directory.CreateDirectory(AppPaths.LocalBase);
+            }
+
+            // Convert into a strongly typed object
+
+            ((List<string>)config.FilePaths).Add(path);
+            
+            // Convert object to JSON string with indentation
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(config, options);
+
+            Trace.WriteLine("BBB");
+            Console.WriteLine("DSFSDFSDF");
+            value = "111";
+
+            // Write to file
+            
+            File.WriteAllText(jsonPath, jsonString);
+            value = File.Exists(jsonPath).ToString();
+            value = System.IO.Path.GetFullPath(jsonPath); 
+
 
             if (BindingContext is DashboardViewModel vm &&
                 !vm.FilePaths.Contains(path))
