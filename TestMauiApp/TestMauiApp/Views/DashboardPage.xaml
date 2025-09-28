@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TestMauiApp.Views.DashboardPage"
+	xmlns:local="clr-namespace:TestMauiApp.Controls"
+             Title="Dashboard">
+    <!-- Root: left sidebar | divider | scrollable tile grid -->
+    <Grid ColumnDefinitions="260,2,*" Padding="16">
+        <!-- LEFT: text + toggles -->
+        <VerticalStackLayout Grid.Column="0" Spacing="24">
+            <Label Text="Text here" FontSize="28" FontAttributes="Bold" />
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Switch IsToggled="{Binding Setting1}" />
+                <Label Grid.Column="1" Text="Scan Enabled" VerticalTextAlignment="Center"/>
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Switch IsToggled="{Binding Setting2}" />
+                <Label Grid.Column="1" Text="setting 2" VerticalTextAlignment="Center"/>
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Switch IsToggled="{Binding Setting3}" />
+                <Label Grid.Column="1" Text="setting 3" VerticalTextAlignment="Center"/>
+            </Grid>
+            <Label Text="Files" FontAttributes="Bold" Margin="0,8,0,0"/>
+            <!-- Row: path Entry + browse + Add -->
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <Entry x:Name="PathEntry"
+               Grid.Column="0"
+               Placeholder="Paste or pick a file path"
+               ClearButtonVisibility="WhileEditing" />
+                <Button Grid.Column="1"
+                Text="…"
+                Padding="12,0"
+                ToolTipProperties.Text="Pick a file"
+                Clicked="OnBrowseClicked"/>
+                <Button Grid.Column="2"
+                Text="Add"
+                Padding="12,0"
+                Clicked="OnAddPathClicked"/>
+            </Grid>
+            <!-- List of paths -->
+            <CollectionView ItemsSource="{Binding FilePaths}"
+                MaximumHeightRequest="300"
+                
+                SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*,Auto"
+                            HeightRequest="28"
+                              
+            Padding="2"
+            BackgroundColor="{AppThemeBinding Light=#F7F7F7, Dark=#2A2A2A}">
+                            <Label Grid.Column="0"
+               Text="{Binding .}"
+                                   FontSize="12"
+               TextColor="{AppThemeBinding Light=Black, Dark=White}"
+               LineBreakMode="TailTruncation"
+               
+               VerticalTextAlignment="Center"/>
+                            <!-- Delete button uses RelativeSource to the page (no x:Name needed) -->
+                            <Button Grid.Column="1"
+                Text="   b   "
+                                        Scale=".4"
+                BackgroundColor="PowderBlue"
+                Padding="4,0"
+                                FontSize="12"
+                                    MaximumHeightRequest="20"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                  Path=BindingContext.RemovePathCommand}"
+                CommandParameter="{Binding .}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <Label Text="No files added yet" Opacity="0.6" HorizontalOptions="Center"/>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </VerticalStackLayout>
+        <!-- DIVIDER -->
+        <BoxView Grid.Column="1" WidthRequest="2" Color="{DynamicResource SeparatorColor}" />
+        <!-- RIGHT: scrollable grid of square cards -->
+        <CollectionView Grid.Column="2"
+                        ItemsSource="{Binding Cards}"
+                        ItemSizingStrategy="MeasureAllItems">
+            <CollectionView.ItemsLayout>
+                <!-- change Span to 2/3/4 etc. to control columns -->
+                <GridItemsLayout Orientation="Vertical" Span="3"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <!-- Square tile with rounded corners -->
+                    <local:SquareView Margin="12">
+                        <Border StrokeThickness="1"
+                    Stroke="#1F000000"
+                    Background="{AppThemeBinding Light=#FFFFFF, Dark=#383838}"
+                    StrokeShape="RoundRectangle 22">
+                            <Border.Shadow>
+                                <Shadow Radius="12" Opacity="0.25" Offset="0,6" />
+                            </Border.Shadow>
+                            <!-- Content of the card -->
+                            <Grid Padding="16" RowDefinitions="Auto,Auto,*">
+                                <Label Text="{Binding Title}"
+                           FontAttributes="Bold"
+                           FontSize="18"/>
+                                <Label Grid.Row="1"
+                           Text="{Binding Subtitle}"
+                           Opacity="0.75"
+                           LineBreakMode="TailTruncation"/>
+                                <!-- Optional icon/placeholder block -->
+                                <Grid Grid.Row="2"
+                          Margin="4,12,4,0"
+                          BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2A2A2A}">
+                                    <!-- ClipToBounds="True" -->
+                                    <!-- CornerRadius="14"> #2A2A2A-->
+                                    <!-- Put an Image here if you have one -->
+                                    <Image Source="{Binding ImagePath}" Aspect="AspectFill"/>
+                                    <Label Text="• • •" HorizontalOptions="Center" VerticalOptions="Center" Opacity="0.6"/>
+                                </Grid>
+                            </Grid>
+                            <!-- Hover/pressed feedback -->
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="PointerOver">
+                                        <VisualState.Setters>
+                                            <Setter Property="Shadow">
+                                                <Shadow Radius="16" Opacity="0.35" Offset="0,10" />
+                                            </Setter>
+                                            <Setter Property="Stroke" Value="#33000000"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <VisualState.Setters>
+                                            <Setter Property="Background" Value="{AppThemeBinding Light=#F0F0F0, Dark=#262626}"/>
+                                            <Setter Property="Stroke" Value="#55000000"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <!-- Make the whole card tappable -->
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.CardTappedCommand}"
+                                          CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </local:SquareView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
+
+
