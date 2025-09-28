@@ -23,11 +23,11 @@
             </Grid>
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                 <Switch IsToggled="{Binding Setting2}" />
-                <Label Grid.Column="1" Text="setting 2" VerticalTextAlignment="Center"/>
+                <Label Grid.Column="1" Text="Auto Refresh" VerticalTextAlignment="Center"/>
             </Grid>
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                 <Switch IsToggled="{Binding Setting3}" />
-                <Label Grid.Column="1" Text="setting 3" VerticalTextAlignment="Center"/>
+                <Label Grid.Column="1" Text="Include Large Subdirectories" VerticalTextAlignment="Center"/>
             </Grid>
             <Label Text="Files" FontAttributes="Bold" Margin="0,8,0,0"/>
             <!-- Row: path Entry + browse + Add -->

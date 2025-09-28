@@ -9,7 +9,7 @@ namespace TestMauiApp.ViewModels;
 
 public partial class DashboardViewModel
 {
-    public bool Setting1 { get; set; }
+    public bool Setting1 { get; set; } = true;
     public bool Setting2 { get; set; }
     public bool Setting3 { get; set; }
 
