@@ -6,9 +6,15 @@
 	xmlns:local="clr-namespace:TestMauiApp.Controls"
              Title="Dashboard">
     <!-- Root: left sidebar | divider | scrollable tile grid -->
-    <Grid ColumnDefinitions="260,2,*" Padding="16">
-        <!-- LEFT: text + toggles -->
-        <VerticalStackLayout Grid.Column="0" Spacing="24">
+    <Grid ColumnDefinitions="260,3,*" Padding="16">
+
+        <Grid Grid.Column="0"
+      RowDefinitions="Auto,Auto,*"
+            Padding="0"
+      RowSpacing="12">
+
+            <!-- LEFT: text + toggles -->
+        <VerticalStackLayout Grid.Column="0" Spacing="12">
             <Label Text="Text here" FontSize="28" FontAttributes="Bold" />
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                 <Switch IsToggled="{Binding Setting1}" />
@@ -39,44 +45,23 @@
                 Padding="12,0"
                 Clicked="OnAddPathClicked"/>
             </Grid>
+            </VerticalStackLayout>
             <!-- List of paths -->
-            <CollectionView ItemsSource="{Binding FilePaths}"
-                MaximumHeightRequest="300"
-                
-                SelectionMode="Single">
+
+            <CollectionView Grid.Row="2" ItemsSource="{Binding FilePaths}"
+                    VerticalOptions="Center">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid ColumnDefinitions="*,Auto"
-                            HeightRequest="28"
-                              
-            Padding="2"
-            BackgroundColor="{AppThemeBinding Light=#F7F7F7, Dark=#2A2A2A}">
-                            <Label Grid.Column="0"
-               Text="{Binding .}"
-                                   FontSize="12"
-               TextColor="{AppThemeBinding Light=Black, Dark=White}"
-               LineBreakMode="TailTruncation"
-               
-               VerticalTextAlignment="Center"/>
-                            <!-- Delete button uses RelativeSource to the page (no x:Name needed) -->
-                            <Button Grid.Column="1"
-                Text="   b   "
-                                        Scale=".4"
-                BackgroundColor="PowderBlue"
-                Padding="4,0"
-                                FontSize="12"
-                                    MaximumHeightRequest="20"
-                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
-                                  Path=BindingContext.RemovePathCommand}"
-                CommandParameter="{Binding .}" />
-                        </Grid>
+                        <Frame Padding="10" Margin="5">
+                            <Label Text="{Binding}" 
+                           FontSize="18" />
+                            
+                        </Frame>
+                        
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-                <CollectionView.EmptyView>
-                    <Label Text="No files added yet" Opacity="0.6" HorizontalOptions="Center"/>
-                </CollectionView.EmptyView>
             </CollectionView>
-        </VerticalStackLayout>
+        </Grid>
         <!-- DIVIDER -->
         <BoxView Grid.Column="1" WidthRequest="2" Color="{DynamicResource SeparatorColor}" />
         <!-- RIGHT: scrollable grid of square cards -->

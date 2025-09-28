@@ -11,6 +11,8 @@ namespace TestMauiApp.Views
             InitializeComponent();
            
             BindingContext = new DashboardViewModel();
+           
+            
         }
 
         async void OnBrowseClicked(object sender, EventArgs e)
