@@ -1,7 +1,12 @@
-﻿using Microsoft.UI;
+﻿using GlobalHotKeys;
+using GlobalHotKeys.Native.Types;
+using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using System;
+using System.Reactive.Linq;
 using WinRT.Interop;
+
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -24,6 +29,13 @@ namespace TestMauiApp.WinUI
             // Fix: Get the main Window instance and pass it to GlobalHotkey.InitAndRegister
             
         }
+        public static AppWindow win;
+        public static HotKeyManager _hotKeyManager;
+        IDisposable _shift1;
+        IDisposable _shift2;
+        IDisposable _subscription;
+
+       
 
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
@@ -33,11 +45,39 @@ namespace TestMauiApp.WinUI
             IntPtr hWnd = WindowNative.GetWindowHandle(window);
             var windowId = Win32Interop.GetWindowIdFromWindow(hWnd);
             var appWindow = AppWindow.GetFromWindowId(windowId);
+            win = appWindow;
 
-            GlobalHotkey.InitAndRegister(window, onHotkey: () =>
-            {
-                appWindow.SetPresenter(AppWindowPresenterKind.FullScreen);
-            });
+            _hotKeyManager = new HotKeyManager();
+            _shift1 = _hotKeyManager.Register(VirtualKeyCode.KEY_A, Modifiers.Alt);
+            _shift2 = _hotKeyManager.Register(VirtualKeyCode.VK_ESCAPE, Modifiers.Alt);
+            
+            int s = 0;
+            _subscription = _hotKeyManager.HotKeyPressed
+              .ObserveOn(SynchronizationContext.Current)
+              .Subscribe(hotKey =>
+              {
+
+                  if (hotKey.Id == 0)
+                  {
+
+                  appWindow.Show();
+                  } else
+                  {
+                      appWindow.Hide();
+                  }
+              });
+
+            appWindow.Hide();
+            // Replace this line:
+            // appWindow.Resize(2);
+
+            // With the following, using a valid SizeInt32 value:
+            appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 1200, Height = 700 });
+            
+
+
+            // appWindow.Hide();
+
 
 
             // Hide title bar completely (no X, no minimize/maximize)

@@ -1,4 +1,10 @@
-﻿namespace TestMauiApp
+﻿using GlobalHotKeys;
+using GlobalHotKeys.Native.Types;
+using Microsoft.Maui.Platform;
+using System.Reactive.Linq;
+using TestMauiApp.Views;
+
+namespace TestMauiApp
 {
     public partial class App : Application
     {
@@ -7,9 +13,17 @@
             InitializeComponent();
         }
 
+        
         protected override Window CreateWindow(IActivationState? activationState)
         {
             Window window = new Window(new AppShell());
+
+            Window secondWindow = new Window(new PopupPage());
+            Application.Current?.OpenWindow(secondWindow);
+
+
+
+
             const int newWidth = 400;
             const int newHeight = 300;
 
