@@ -4,7 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TestMauiApp.Views.DashboardPage"
 	xmlns:local="clr-namespace:TestMauiApp.Controls"
-             Title="Dashboard">
+             Title="FastFind">
     <!-- Root: left sidebar | divider | scrollable tile grid -->
     <Grid ColumnDefinitions="260,3,*" Padding="16">
 
@@ -16,7 +16,7 @@
             <!-- LEFT: text + toggles -->
         <VerticalStackLayout Grid.Column="0" Spacing="12">
             
-            <Label Text="Text here" FontSize="28" FontAttributes="Bold" />
+            <Label Text="Settings" FontSize="28" FontAttributes="Bold" />
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                 <Switch IsToggled="{Binding Setting1}" />
                 <Label Grid.Column="1" Text="Scan Enabled" VerticalTextAlignment="Center"/>

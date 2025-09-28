@@ -10,6 +10,7 @@ namespace TestMauiApp.WinUI
 
             builder
                 .UseSharedMauiApp();
+                
                  
 
             return builder.Build();

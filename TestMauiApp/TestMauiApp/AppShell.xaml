@@ -9,7 +9,8 @@
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:Views.DashboardPage}"
+        ContentTemplate="{DataTemplate local:Views.PopupPage}"
+        
         Route="MainPage" />
 
 </Shell>

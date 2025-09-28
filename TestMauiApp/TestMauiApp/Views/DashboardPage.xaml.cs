@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.Json;
 using TestMauiApp.FileSearch;
 using TestMauiApp.ViewModels;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TestMauiApp.Views
@@ -44,15 +45,16 @@ namespace TestMauiApp.Views
 
         async void OnBrowseClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("fds");
-            Trace.WriteLine("dsfdsf");
             var result = await FilePicker.Default.PickAsync(new PickOptions
             {
-                PickerTitle = "Choose a file"
+                PickerTitle = "Choose any file in the folder"
             });
 
             if (result != null)
-                PathEntry.Text = result.FullPath; // put the chosen path in the textbox
+            {
+                var folderPath = System.IO.Path.GetDirectoryName(result.FullPath);
+                PathEntry.Text = folderPath;
+            }
         }
 
 

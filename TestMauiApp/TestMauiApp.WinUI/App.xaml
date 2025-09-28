@@ -13,5 +13,6 @@
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
         </ResourceDictionary>
+        
     </maui:MauiWinUIApplication.Resources>
 </maui:MauiWinUIApplication>

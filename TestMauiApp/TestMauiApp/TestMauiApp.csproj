@@ -27,9 +27,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\PopupPage.xaml.cs">
+	    <DependentUpon>PopupPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\DashboardPage.xaml.cs">
 	    <DependentUpon>DashboardPage.xaml</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\PopupPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>
