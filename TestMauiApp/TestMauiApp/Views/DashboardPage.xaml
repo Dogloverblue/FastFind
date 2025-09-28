@@ -30,7 +30,9 @@
             </Grid>
             <Label Text="Files" FontAttributes="Bold" Margin="0,8,0,0"/>
             <!-- Row: path Entry + browse + Add -->
+            
             <Grid ColumnDefinitions="*,Auto,Auto">
+                    <Frame></Frame>
                 <Entry x:Name="PathEntry"
                Grid.Column="0"
                Placeholder="Paste or pick a file path"
@@ -49,15 +51,57 @@
             <!-- List of paths -->
 
             <CollectionView Grid.Row="2" ItemsSource="{Binding FilePaths}"
-                    VerticalOptions="Center">
+                    VerticalOptions="Center"
+                    BackgroundColor="#363636"
+                            >
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Padding="10" Margin="5">
-                            <Label Text="{Binding}" 
-                           FontSize="18" />
-                            
+                        <Frame Padding="5" Margin="5"
+                   HasShadow="False"
+                   CornerRadius="6">
+                            <Frame.Background>
+                                <SolidColorBrush Color="#00FFFFFF"/>
+                                <!-- Transparent -->
+                            </Frame.Background>
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <!-- Default State -->
+                                    <VisualState x:Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter TargetName="FrameContent"
+                                        Property="Background"
+                                        Value="#00FFFFFF"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+
+                                    <!-- Hover State -->
+                                    <VisualState x:Name="PointerOver">
+                                        <VisualState.Setters>
+                                            <Setter TargetName="FrameContent"
+                                        Property="Background"
+                                        Value="#20FFFFFF"/>
+                                            <!-- Slightly white -->
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <Grid x:Name="FrameContent" ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" VerticalTextAlignment="Center" Text="{Binding}" FontSize="12" />
+                                <Button Text="🗑️"
+                            Grid.Column="1"
+                            HeightRequest="16"
+                                        WidthRequest="16"
+                            Padding="0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                       Path=BindingContext.RemovePathCommand}"
+                     CommandParameter="{Binding .}"
+                            SemanticProperties.Hint="Delete this item"/>
+                                <!--<Button Text="A" FontSize="8"></Button> -->
+                            </Grid>
                         </Frame>
-                        
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
