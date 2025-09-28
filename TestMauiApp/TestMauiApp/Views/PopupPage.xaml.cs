@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using FileSearch;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Input;
+using static Lucene.Net.Util.Fst.Util;
 
 #if WINDOWS
 using Microsoft.UI.Input;
@@ -34,20 +37,32 @@ public partial class PopupPage : ContentPage
     }
 
     public ICommand ItemTappedCommand { get; }
+    static List<string> paths = new List<string>();
 
+    private void CentralEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        Items.Clear();
+        paths.Clear();
+        List<SearchIndex.BestMatchResult> results = SearchIndex.SearchBestMatches(CentralText, 5);
+        foreach (SearchIndex.BestMatchResult result in results)
+        {
+            Items.Add(new OptionItem(result.Name, "icon1.png"));
+            paths.Add(result.Path);
+        }
+    }
+
+    public static void OpenWithDefaultProgram(string path)
+    {
+        using Process fileopener = new Process();
+
+        fileopener.StartInfo.FileName = "explorer";
+        fileopener.StartInfo.Arguments = "\"" + path + "\"";
+        fileopener.Start();
+    }
     public PopupPage()
     {
         InitializeComponent();
         BindingContext = this;
-
-        // Add 5 items (Use images you add to Resources\Images, e.g. "icon1.png"...)
-        Items.Add(new OptionItem("Option One", "icon1.png", () => OnOptionChosen("Option One")));
-        Items.Add(new OptionItem("Option Two", "icon2.png", () => OnOptionChosen("Option Two")));
-        Items.Add(new OptionItem("Option Three", "icon3.png", () => OnOptionChosen("Option Three")));
-        Items.Add(new OptionItem("Option Four", "icon4.png", () => OnOptionChosen("Option Four")));
-        Items.Add(new OptionItem("Option Five", "icon5.png", () => OnOptionChosen("Option Five")));
-
-        // default select first
         SelectedItem = Items.FirstOrDefault();
 
         ItemTappedCommand = new Command<OptionItem?>(item =>
@@ -63,10 +78,25 @@ public partial class PopupPage : ContentPage
 #endif
     }
 
-    private void OnOptionChosen(string which)
+
+    private void OptionsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        // Do whatever you need on “click”
-        DisplayAlert("Clicked", $"You chose: {which}\nInput: \"{CentralText}\"", "OK");
+        if (e.CurrentSelection.FirstOrDefault() is OptionItem selected)
+        {
+            var num = Items.IndexOf(selected);
+            OpenWithDefaultProgram(paths[num]);
+  
+        }
+    }
+  
+    private void OnItemButtonClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is OptionItem item)
+        {
+            int index = Items.IndexOf(item); // 0–4
+            string root = Path.GetDirectoryName(paths[index]);
+            Process.Start("explorer.exe", @root);
+        }
     }
 
 #if WINDOWS

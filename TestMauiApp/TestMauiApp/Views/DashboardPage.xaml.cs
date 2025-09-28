@@ -34,6 +34,12 @@ namespace TestMauiApp.Views
             foreach (string path in files) {
                 model.FilePaths.Add(path);
             }
+
+            foreach (string folderPath in files)
+            {
+                FileSearch.Program.indexer.addPathToIndex(folderPath);
+            }
+            FileSearch.Program.indexer.updateIndex();
             // Items is name of a collectionView
             // Add every from files to Items
 

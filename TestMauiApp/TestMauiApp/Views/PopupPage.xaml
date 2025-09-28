@@ -29,6 +29,7 @@
         <Grid RowDefinitions="Auto" HorizontalOptions="Center" Margin="0,16,0,12">
             <Entry
                 x:Name="CentralEntry"
+                TextChanged="CentralEntry_TextChanged"
                 WidthRequest="420"
                 HorizontalOptions="Center"
                 Placeholder="Type here..."
@@ -42,6 +43,7 @@
             SelectionMode="Single"
             ItemsSource="{Binding Items}"
             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+            SelectionChanged="OptionsList_SelectionChanged"
             VerticalOptions="Start"
             >
             <CollectionView.ItemsLayout>
@@ -90,7 +92,8 @@
                                 FontSize="18"
                                 HorizontalOptions="End"
                                  BackgroundColor="#005B5B58"
-                            Text="📂" >
+                            Text="📂" 
+                                Clicked="OnItemButtonClicked">
                         </Button>
                     </Grid>
                 </DataTemplate>

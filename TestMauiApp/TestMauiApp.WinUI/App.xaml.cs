@@ -5,6 +5,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System;
 using System.Reactive.Linq;
+using Windows.Storage;
 using WinRT.Interop;
 
 
@@ -40,6 +41,8 @@ namespace TestMauiApp.WinUI
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
             base.OnLaunched(args);
+
+        
 
             var window = Application.Windows[0].Handler.PlatformView as Microsoft.UI.Xaml.Window;
             IntPtr hWnd = WindowNative.GetWindowHandle(window);

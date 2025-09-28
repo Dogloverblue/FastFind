@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace TestMauiApp.FileSearch
 {
-    static class AppPaths
+    public static class AppPaths
     {
         private const string App = "FastFind";
+
+        public static void setup()
+        {
+            EnsureDir(LocalBase);
+            EnsureDir(CacheDir);
+            EnsureDir(IndexDir);
+        }
 
         public static string LocalBase =>
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), App);
@@ -17,6 +24,7 @@ namespace TestMauiApp.FileSearch
         public static string IndexDir => EnsureDir(Path.Combine(LocalBase, "search_index"));
 
         public static string EntryCacheFile => Path.Combine(CacheDir, "entry_cache.json");
+
         public static string SettingsFile => Path.Combine(LocalBase, "settings.json");
 
         private static string EnsureDir(string dir)

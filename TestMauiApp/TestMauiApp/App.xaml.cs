@@ -2,6 +2,8 @@
 using GlobalHotKeys.Native.Types;
 using Microsoft.Maui.Platform;
 using System.Reactive.Linq;
+using System.Text.Json;
+using TestMauiApp.FileSearch;
 using TestMauiApp.Views;
 
 namespace TestMauiApp
@@ -22,14 +24,14 @@ namespace TestMauiApp
             Application.Current?.OpenWindow(secondWindow);
 
 
-
-
             const int newWidth = 400;
             const int newHeight = 300;
 
             window.Width = newWidth;
             window.Height = newHeight;
+            AppPaths.setup();
             return new Window(new AppShell());
+
         }
     }
 }

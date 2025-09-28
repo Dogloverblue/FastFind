@@ -1,5 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text.Json;
 using System.Windows.Input;
+using TestMauiApp.FileSearch;
+using static Lucene.Net.Queries.Function.ValueSources.MultiFunction;
 
 namespace TestMauiApp.ViewModels;
 
@@ -32,6 +36,19 @@ public partial class DashboardViewModel
         if (path is null) return;
 
         FilePaths.Remove(path);
+        List<string> files = new();
+        string jsonPath = AppPaths.SettingsFile;
+        ConfigData config;
+        if (File.Exists(jsonPath))
+        {
+            string jsonStringRead = File.ReadAllText(jsonPath);
+            config = JsonSerializer.Deserialize<ConfigData>(jsonStringRead);
+            config.FilePaths.Remove(path);
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(config, options);
+
+            File.WriteAllText(jsonPath, jsonString);
+        }
     });
 
 }
